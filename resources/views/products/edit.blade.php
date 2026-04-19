@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.store')
 
 @section('content')
 
@@ -38,15 +38,12 @@
 
             <!-- CATEGORY -->
             <div class="mb-3">
-                <label>Category</label>
-                <select name="category_id" class="form-control">
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}"
-                            {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label>Catégorie</label>
+                <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
+                       value="{{ old('category', $product->category?->name) }}"
+                       placeholder="Ex. Boissons…">
+                @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <p class="form-text small text-muted mb-0">Même principe qu’à la création : nom libre, catégorie créée si besoin.</p>
             </div>
 
             <!-- IMAGE URL -->

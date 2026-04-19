@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.store')
 
 @section('content')
 
@@ -35,17 +35,16 @@
                 <input type="number" name="stock" class="form-control">
             </div>
 
-            <!-- CATEGORY -->
+            <!-- CATEGORY (texte : nouvelle catégorie créée si le nom n’existe pas) -->
             <div class="mb-3">
-                <label>Category</label>
-                <select name="category_id" class="form-control">
-                    <option value="">Select Category</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}">
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label>Catégorie</label>
+                <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
+                       value="{{ old('category') }}"
+                       placeholder="Ex. Boissons, Pâtisseries…">
+                @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <p class="form-text small text-muted mb-0">
+                    Tapez le nom de la catégorie. Si elle n’existe pas encore, elle sera créée. Le menu permet ensuite le filtrage par catégorie.
+                </p>
             </div>
 
             <!-- IMAGE URL -->

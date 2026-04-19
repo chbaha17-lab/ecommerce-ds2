@@ -1,8 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.store')
 
 @section('content')
 
-<h2 class="mb-4">📦 Products List</h2>
+<h2 class="mb-4">Produits</h2>
+
+<div class="mb-3">
+    <a href="{{ route('products.create') }}" class="btn btn-beige">+ Nouveau produit</a>
+</div>
 
 <div class="row g-4">
 
@@ -13,45 +17,33 @@
         <div class="card p-3 shadow-sm">
 
             @if($product->image)
-                <img src="{{ asset('storage/'.$product->image) }}"
-                     class="card-img-top"
-                     style="height:180px; object-fit:cover;">
+                @php $u = \Illuminate\Support\Str::startsWith($product->image, ['http://','https://']) ? $product->image : asset('storage/'.$product->image); @endphp
+                <img src="{{ $u }}" class="card-img-top" style="height:180px; object-fit:cover;">
             @endif
 
             <div class="card-body">
 
                 <h5>{{ $product->name }}</h5>
-
-                <p>{{ $product->price }} DT</p>
-
+                <p>{{ $product->price }} DT — Stock : {{ $product->stock }}</p>
                 <p class="text-muted">
                     @if($product->category)
-    <span class="badge bg-secondary">
-        {{ $product->category->name }}
-    </span>
-@else
-    <span class="badge bg-light text-dark">
-        No category
-    </span>
-@endif
+                        <span class="badge bg-secondary">{{ $product->category->name }}</span>
+                    @else
+                        <span class="badge bg-light text-dark">Sans catégorie</span>
+                    @endif
                 </p>
 
-                <div class="d-flex gap-2">
-
-                    <a href="/products/{{ $product->id }}/edit"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
-
-                    <form action="/products/{{ $product->id }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-
-                        <button class="btn btn-danger btn-sm">
-                            Delete
-                        </button>
-                    </form>
-
+                <div class="d-flex gap-2 flex-wrap">
+                    @can('update', $product)
+                        <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    @endcan
+                    @can('delete', $product)
+                        <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    @endcan
                 </div>
 
             </div>

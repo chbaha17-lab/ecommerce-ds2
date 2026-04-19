@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.store')
 
 @section('content')
 
@@ -8,9 +8,9 @@
 
         <h2>🛒 Your Cart</h2>
 
-        <a href="/menu" class="btn btn-sm"
+        <a href="{{ route('menu') }}" class="btn btn-sm"
            style="background:#e6d3b3; color:#6b4f4f;">
-            ← Back to Menu
+            ← Menu
         </a>
 
     </div>
@@ -95,15 +95,28 @@
 
         </div>
 
+        <div class="card p-4 border-0 shadow-sm mt-3">
+            <h5 class="mb-3">Passer la commande</h5>
+            @guest
+                <p class="text-muted mb-2"><a href="{{ route('login') }}">Connectez-vous</a> pour valider votre panier.</p>
+            @else
+                <form method="POST" action="{{ route('orders.store') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-beige">Confirmer la commande</button>
+                </form>
+                <p class="small text-muted mt-2 mb-0">Statut initial : en attente de validation.</p>
+            @endguest
+        </div>
+
     @else
 
         <div class="text-center p-5">
 
             <h4>🛒 Your cart is empty</h4>
 
-            <a href="/menu" class="btn mt-3"
+            <a href="{{ route('menu') }}" class="btn mt-3"
                style="background:#e6d3b3; color:#6b4f4f;">
-                Go to Menu
+                Menu
             </a>
 
         </div>
